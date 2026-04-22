@@ -1,0 +1,20 @@
+{
+  "domain": "thaies.com",
+  "timestamp": "2026-04-21T13:31:49.907Z",
+  "scanner": "SubKamuna v4.0",
+  "total_subdomains": 3,
+  "live_services": 0,
+  "all_subdomains": [
+    "thaies.com",
+    "ww25.thaies.com",
+    "www.thaies.com"
+  ],
+  "live_subdomains": [],
+  "files_discovered": [],
+  "folders_discovered": [],
+  "emails_extracted": [],
+  "technologies_detected": {},
+  "js_endpoints": [],
+  "platform": "win32",
+  "node_version": "v24.14.1"
+}

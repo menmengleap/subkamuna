@@ -5,5 +5,27 @@
       "thaikit.net",
       "www.thaikit.net"
     ]
+  },
+  "subdomains_thaies.com": {
+    "timestamp": 1776778309442,
+    "subdomains": [
+      "thaies.com",
+      "ww25.thaies.com",
+      "www.thaies.com"
+    ]
+  },
+  "subdomains_thaiest.com": {
+    "timestamp": 1776778406297,
+    "subdomains": [
+      "thaiest.com",
+      "autodiscover.thaiest.com",
+      "cpanel.thaiest.com",
+      "cpcalendars.thaiest.com",
+      "cpcontacts.thaiest.com",
+      "mail.thaiest.com",
+      "webdisk.thaiest.com",
+      "webmail.thaiest.com",
+      "www.thaiest.com"
+    ]
   }
 }

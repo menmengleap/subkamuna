@@ -1,0 +1,9 @@
+thaiest.com
+autodiscover.thaiest.com
+cpanel.thaiest.com
+cpcalendars.thaiest.com
+cpcontacts.thaiest.com
+mail.thaiest.com
+webdisk.thaiest.com
+webmail.thaiest.com
+www.thaiest.com

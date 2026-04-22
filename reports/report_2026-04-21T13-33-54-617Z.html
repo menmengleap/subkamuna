@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubKamuna Scan Report</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { opacity: 0.9; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 40px;
+            background: #f8f9fa;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .stat-card h3 { font-size: 2em; color: #667eea; margin-bottom: 5px; }
+        .stat-card p { color: #666; font-size: 0.9em; }
+        .content { padding: 40px; }
+        .domain-section {
+            margin-bottom: 40px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .domain-header {
+            background: #667eea;
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .domain-body {
+            padding: 20px;
+            display: none;
+        }
+        .domain-body.active { display: block; }
+        .subdomain-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .subdomain-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        .status-200 { color: #28a745; font-weight: bold; }
+        .status-301, .status-302 { color: #ffc107; }
+        .status-403, .status-404 { color: #dc3545; }
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            margin: 2px;
+        }
+        .badge-live { background: #28a745; color: white; }
+        .badge-file { background: #17a2b8; color: white; }
+        .badge-folder { background: #ffc107; color: #333; }
+        .badge-email { background: #dc3545; color: white; }
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .tech-item {
+            background: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.85em;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #5a67d8; }
+        @media (max-width: 768px) {
+            .stats { grid-template-columns: 1fr; }
+            .subdomain-list { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 SubKamuna Scan Report</h1>
+            <p>Generated on 4/21/2026, 8:33:54 PM</p>
+            <p>Scan Duration: 36.18 seconds</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <h3>1</h3>
+                <p>Domains Scanned</p>
+            </div>
+            <div class="stat-card">
+                <h3>9</h3>
+                <p>Total Subdomains</p>
+            </div>
+            <div class="stat-card">
+                <h3>9</h3>
+                <p>Live Services</p>
+            </div>
+            <div class="stat-card">
+                <h3>13</h3>
+                <p>Files Discovered</p>
+            </div>
+        </div>
+        
+        <div class="content">
+            <button onclick="expandAll()">Expand All</button>
+            <button onclick="collapseAll()">Collapse All</button>
+            <button onclick="exportToJSON()">Export JSON</button>
+            <button onclick="window.print()">Print Report</button>
+            <br><br>
+            <div class="domain-section">
+                <div class="domain-header" onclick="toggleDomain(this)">
+                    [+] thaiest.com - 9 live / 9 total
+                </div>
+                <div class="domain-body">
+                    <h4>[-] Live Subdomains (9)</h4>
+                    <div class="subdomain-list"><div class="subdomain-item">
+                        <span class="status-400">https://autodiscover.thaiest.com (400)</span>
+                      </div><div class="subdomain-item">
+                        <span class="status-200">https://cpanel.thaiest.com (200)</span>
+                      </div><div class="subdomain-item">
+                        <span class="status-401">https://webdisk.thaiest.com (401)</span>
+                      </div><div class="subdomain-item">
+                        <span class="status-200">https://webmail.thaiest.com (200)</span>
+                      </div><div class="subdomain-item">
+                        <span class="status-401">https://cpcalendars.thaiest.com (401)</span>
+                      </div><div class="subdomain-item">
+                        <span class="status-401">https://cpcontacts.thaiest.com (401)</span>
+                      </div><div class="subdomain-item">
+                        <span class="status-200">https://thaiest.com (200)</span>
+                      </div><div class="subdomain-item">
+                        <span class="status-200">https://www.thaiest.com (200)</span>
+                      </div><div class="subdomain-item">
+                        <span class="status-200">https://mail.thaiest.com (200)</span>
+                      </div></div><h4 style="margin-top: 20px;">[+] Interesting Files (13)</h4>
+                      <div class="subdomain-list"><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://cpanel.thaiest.com/robots.txt (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://webmail.thaiest.com/robots.txt (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://webmail.thaiest.com/phpinfo.php (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://cpanel.thaiest.com/phpinfo.php (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaiest.com/sitemap.xml (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaiest.com/robots.txt (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaiest.com/LICENSE.txt (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://www.thaiest.com/robots.txt (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://www.thaiest.com/sitemap.xml (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://mail.thaiest.com/sitemap.xml (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://www.thaiest.com/LICENSE.txt (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://mail.thaiest.com/robots.txt (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://mail.thaiest.com/LICENSE.txt (200)</div></div><h4 style="margin-top: 20px;">[+] Accessible Folders (117)</h4>
+                      <div class="subdomain-list"><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpanel.thaiest.com/images/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcalendars.thaiest.com/qa/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcalendars.thaiest.com/uat/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcalendars.thaiest.com/sandbox/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcalendars.thaiest.com/demo/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://webmail.thaiest.com/images/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/admin/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/administrator/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/dashboard/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/wp-admin/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/portal/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/api/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/admin/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/private/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/public/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/images/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/test/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/v2/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/api/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/v3/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/v1/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/cpanel/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/graphql/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/swagger/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/logs/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/tmp/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/internal/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/hidden/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/www/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/dev/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/testing/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/cache/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/swagger-ui/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/uploads/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/secret/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/staging/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/dashboard/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/administrator/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/uat/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/qa/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/wp-admin/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/backup/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/cpanel/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/temp/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/demo/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/portal/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/static/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/assets/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/logs/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/old/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://cpcontacts.thaiest.com/sandbox/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/admin/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/portal/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/cpanel/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/wp-admin/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/dashboard/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/v1/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/administrator/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/api/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/v2/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/v3/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/v1/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/swagger/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/temp/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/tmp/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/cache/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/logs/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/swagger-ui/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/v2/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/images/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/graphql/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/assets/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/uploads/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/public/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/www/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/static/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/graphql/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/uat/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/sandbox/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/backup/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/secret/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/sandbox/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/v3/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/old/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/demo/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/private/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/swagger-ui/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/backup/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/swagger/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/tmp/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/old/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/temp/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/cache/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/uat/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/dev/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/internal/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/staging/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/test/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/qa/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/testing/ (403)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://www.thaiest.com/hidden/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/uploads/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/public/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/images/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/static/ (403)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/qa/ (403)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/private/ (403)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/hidden/ (403)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/secret/ (403)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/assets/ (403)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/internal/ (403)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/www/ (403)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/dev/ (403)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/staging/ (403)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/test/ (403)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/testing/ (403)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaiest.com/demo/ (403)</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Generated by SubKamuna Ultimate Scanner v3.0</p>
+            <p>Bug Bounty Ready | Advanced Recon Tool</p>
+        </div>
+    </div>
+    
+    <script>
+        function toggleDomain(header) {
+            const body = header.nextElementSibling;
+            body.classList.toggle('active');
+        }
+        
+        function expandAll() {
+            document.querySelectorAll('.domain-body').forEach(body => {
+                body.classList.add('active');
+            });
+        }
+        
+        function collapseAll() {
+            document.querySelectorAll('.domain-body').forEach(body => {
+                body.classList.remove('active');
+            });
+        }
+        
+        function exportToJSON() {
+            const data = {
+  "thaiest.com": {
+    "domain": "thaiest.com",
+    "total": 9,
+    "live": [
+      "https://autodiscover.thaiest.com (400)",
+      "https://cpanel.thaiest.com (200)",
+      "https://webdisk.thaiest.com (401)",
+      "https://webmail.thaiest.com (200)",
+      "https://cpcalendars.thaiest.com (401)",
+      "https://cpcontacts.thaiest.com (401)",
+      "https://thaiest.com (200)",
+      "https://www.thaiest.com (200)",
+      "https://mail.thaiest.com (200)"
+    ],
+    "liveDetailed": [
+      {
+        "subdomain": "autodiscover.thaiest.com",
+        "url": "https://autodiscover.thaiest.com",
+        "fullUrl": "https://autodiscover.thaiest.com",
+        "displayUrl": "https://autodiscover.thaiest.com (400)",
+        "statusCode": 400,
+        "statusText": "Bad Request",
+        "responseTime": 464,
+        "server": "cloudflare",
+        "contentType": "text/plain; charset=\"UTF-8\"",
+        "contentLength": 52,
+        "technologies": [],
+        "title": "",
+        "headers": {
+          "date": "Tue, 21 Apr 2026 13:33:28 GMT",
+          "content-type": "text/plain; charset=\"UTF-8\"",
+          "content-length": "52",
+          "connection": "keep-alive",
+          "strict-transport-security": "max-age=63072000; includeSubDomains",
+          "x-frame-options": "SAMEORIGIN",
+          "x-content-type-options": "nosniff",
+          "x-turbo-charged-by": "LiteSpeed",
+          "server": "cloudflare",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-cache-status": "DYNAMIC",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "speculation-rules": "\"/cdn-cgi/speculation\"",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=y5GXpJpzAV%2BXSfD7N7t6Hxr3uID%2F3%2BeLZKLdB6s7BM%2BjQXNTbWcZClnwZA6QnYBgLbjybswvujwcWY%2BV%2F%2FTjHd0dYE%2BYDkJ6uJ6gC7P%2Frhdrop2Q2ZrmwT4BhICUaxFLIS7TYcpB65cck%2Fg%3D\"}]}",
+          "cf-ray": "9efcc2bbce663104-SIN"
+        }
+      },
+      {
+        "subdomain": "cpanel.thaiest.com",
+        "url": "https://cpanel.thaiest.com",
+        "fullUrl": "https://cpanel.thaiest.com",
+        "displayUrl": "https://cpanel.thaiest.com (200)",
+        "statusCode": 200,
+        "statusText": "OK",
+        "responseTime": 554,
+        "server": "cloudflare",
+        "contentType": "text/html; charset=\"utf-8\"",
+        "contentLength": 38321,
+        "technologies": [],
+        "title": "cPanel Login",
+        "headers": {
+          "date": "Tue, 21 Apr 2026 13:33:28 GMT",
+          "content-type": "text/html; charset=\"utf-8\"",
+          "transfer-encoding": "chunked",
+          "connection": "keep-alive",
+          "cache-control": "no-cache, no-store, must-revalidate, private",
+          "pragma": "no-cache",
+          "set-cookie": "cprelogin=no; HttpOnly; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure, cpsession=%3aBIU8fYC6YV5hGWQh%2c6dc286fb937974bd58cda32d6839d7b0; HttpOnly; path=/; port=443; secure, roundcube_sessid=expired; HttpOnly; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure, roundcube_sessauth=expired; HttpOnly; domain=cpanel.thaiest.com; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure, PPA_ID=expired; HttpOnly; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=IrG09rNcPionKHnJUEL2vhLA%2BPDq4UZ3iEUiw3PuXYFdGlmba03fEoETQNw7EM4nOow4HN5EWNuV6AS8jRc3mZ8lGAtzm7p4hcNOpqnjwSbcxvu5uNcaNQWJqDuh2MGoXCtRfiY%3D\"}]}",
+          "vary": "Accept-Encoding",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=63072000; includeSubDomains",
+          "x-frame-options": "SAMEORIGIN",
+          "x-content-type-options": "nosniff",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "x-turbo-charged-by": "LiteSpeed",
+          "cf-cache-status": "DYNAMIC",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "speculation-rules": "\"/cdn-cgi/speculation\"",
+          "cf-ray": "9efcc2bc7ded5f46-SIN"
+        }
+      },
+      {
+        "subdomain": "webdisk.thaiest.com",
+        "url": "https://webdisk.thaiest.com",
+        "fullUrl": "https://webdisk.thaiest.com",
+        "displayUrl": "https://webdisk.thaiest.com (401)",
+        "statusCode": 401,
+        "statusText": "Unauthorized",
+        "responseTime": 738,
+        "server": "cloudflare",
+        "contentType": "text/html; charset=\"utf-8\"",
+        "contentLength": 955,
+        "technologies": [],
+        "title": "",
+        "headers": {
+          "date": "Tue, 21 Apr 2026 13:33:28 GMT",
+          "content-type": "text/html; charset=\"utf-8\"",
+          "transfer-encoding": "chunked",
+          "connection": "keep-alive",
+          "persistent-auth": "false",
+          "host": "webdisk.thaiest.com:443",
+          "cache-control": "no-cache, no-store, must-revalidate, private",
+          "vary": "Accept-Encoding",
+          "www-authenticate": "Basic realm=\"Restricted Area\"",
+          "expires": "Fri, 01 Jan 1990 00:00:00 GMT",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=egBLYVV0HAP0fYpP%2BIAL0w2uQ88mJQlV7Xs40C1to%2FZywV9is3Toi4irPWgJMGcH4KsURsSwRwLObu8Won7r6G2QVhgpAUtL%2BEeO2V5zkzmXFkp58lmQ0n2ydZhVaSFaq65j6MrG\"}]}",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=63072000; includeSubDomains",
+          "x-frame-options": "SAMEORIGIN",
+          "x-content-type-options": "nosniff",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "x-turbo-charged-by": "LiteSpeed",
+          "cf-cache-status": "DYNAMIC",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "speculation-rules": "\"/cdn-cgi/speculation\"",
+          "cf-ray": "9efcc2be1eae81c0-SIN"
+        }
+      },
+      {
+        "subdomain": "webmail.thaiest.com",
+        "url": "https://webmail.thaiest.com",
+        "fullUrl": "https://webmail.thaiest.com",
+        "displayUrl": "https://webmail.thaiest.com (200)",
+        "statusCode": 200,
+        "statusText": "OK",
+        "responseTime": 995,
+        "server": "cloudflare",
+        "contentType": "text/html; charset=\"utf-8\"",
+        "contentLength": 38333,
+        "technologies": [],
+        "title": "Webmail Login",
+        "headers": {
+          "date": "Tue, 21 Apr 2026 13:33:28 GMT",
+          "content-type": "text/html; charset=\"utf-8\"",
+          "transfer-encoding": "chunked",
+          "connection": "keep-alive",
+          "cache-control": "no-cache, no-store, must-revalidate, private",
+          "pragma": "no-cache",
+          "set-cookie": "webmailrelogin=no; HttpOnly; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure, webmailsession=%3a59ew_yIp5cYFlGUA%2cef0a3ed3c8468e809cde3107f2eb96e6; HttpOnly; path=/; port=443; secure, roundcube_sessid=expired; HttpOnly; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure, roundcube_sessauth=expired; HttpOnly; domain=webmail.thaiest.com; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure, PPA_ID=expired; HttpOnly; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure, roundcube_cookies=enabled; HttpOnly; expires=Wed, 21-Apr-2027 13:33:28 GMT; path=/; port=443; secure",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=Ac4FGy%2F%2FV4E8LKXSez6upo0rALXZACmhHuRWERQAEw7wbXvUS8uqYuIT4iaNWuA%2B28jssXoG%2FvtZu5zhednMG%2BGeiY1wVJDTRXfuqh4%2BU4ni9d7gls%2Fda3AbNxXioST8Jvfa0t33\"}]}",
+          "vary": "Accept-Encoding",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=63072000; includeSubDomains",
+          "x-frame-options": "SAMEORIGIN",
+          "x-content-type-options": "nosniff",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "x-turbo-charged-by": "LiteSpeed",
+          "cf-cache-status": "DYNAMIC",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "speculation-rules": "\"/cdn-cgi/speculation\"",
+          "cf-ray": "9efcc2bf8c8d6bd3-SIN"
+        }
+      },
+      {
+        "subdomain": "cpcalendars.thaiest.com",
+        "url": "https://cpcalendars.thaiest.com",
+        "fullUrl": "https://cpcalendars.thaiest.com",
+        "displayUrl": "https://cpcalendars.thaiest.com (401)",
+        "statusCode": 401,
+        "statusText": "Unauthorized",
+        "responseTime": 1191,
+        "server": "cloudflare",
+        "contentType": "text/html; charset=\"utf-8\"",
+        "contentLength": 955,
+        "technologies": [],
+        "title": "",
+        "headers": {
+          "date": "Tue, 21 Apr 2026 13:33:28 GMT",
+          "content-type": "text/html; charset=\"utf-8\"",
+          "transfer-encoding": "chunked",
+          "connection": "keep-alive",
+          "persistent-auth": "false",
+          "host": "cpcalendars.thaiest.com:443",
+          "cache-control": "no-cache, no-store, must-revalidate, private",
+          "vary": "Accept-Encoding",
+          "www-authenticate": "Basic realm=\"DAV Server\"",
+          "expires": "Fri, 01 Jan 1990 00:00:00 GMT",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=yFLRYkt%2Fxab5JoDDdrBy%2BWTI0m7wwMcJ%2FjLMsgeoCVN1ns3XJ2CDQpuWFF8KiwUR%2FMPN1XDA%2FiZZos9gQ1L18BJvcnV0VcIHPODiiBgskhCB3dv5LVKTO%2BKWw6bVxV1WxMB1jgXm03ITGg%3D%3D\"}]}",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=63072000; includeSubDomains",
+          "x-frame-options": "SAMEORIGIN",
+          "x-content-type-options": "nosniff",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "x-turbo-charged-by": "LiteSpeed",
+          "cf-cache-status": "DYNAMIC",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "speculation-rules": "\"/cdn-cgi/speculation\"",
+          "cf-ray": "9efcc2bf2a1f069f-HKG"
+        }
+      },
+      {
+        "subdomain": "cpcontacts.thaiest.com",
+        "url": "https://cpcontacts.thaiest.com",
+        "fullUrl": "https://cpcontacts.thaiest.com",
+        "displayUrl": "https://cpcontacts.thaiest.com (401)",
+        "statusCode": 401,
+        "statusText": "Unauthorized",
+        "responseTime": 1255,
+        "server": "cloudflare",
+        "contentType": "text/html; charset=\"utf-8\"",
+        "contentLength": 955,
+        "technologies": [],
+        "title": "",
+        "headers": {
+          "date": "Tue, 21 Apr 2026 13:33:29 GMT",
+          "content-type": "text/html; charset=\"utf-8\"",
+          "transfer-encoding": "chunked",
+          "connection": "keep-alive",
+          "persistent-auth": "false",
+          "host": "cpcontacts.thaiest.com:443",
+          "cache-control": "no-cache, no-store, must-revalidate, private",
+          "vary": "Accept-Encoding",
+          "www-authenticate": "Basic realm=\"DAV Server\"",
+          "expires": "Fri, 01 Jan 1990 00:00:00 GMT",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=PjLrZVVMGANFz%2FNFu9sTR5WdtTH7PIS1NIsfo%2B6FGMD8ZyE9d20b6YWakJJpGweXCPwd3gGCj76TFqyICXY7n%2BGf3vyWqa03dmeVsi6426hDOXSPozcs0aayvH5TfUOEiy5mHdp%2F%2FhVU\"}]}",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=63072000; includeSubDomains",
+          "x-frame-options": "SAMEORIGIN",
+          "x-content-type-options": "nosniff",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "x-turbo-charged-by": "LiteSpeed",
+          "cf-cache-status": "DYNAMIC",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "speculation-rules": "\"/cdn-cgi/speculation\"",
+          "cf-ray": "9efcc2bfa96b7d73-HKG"
+        }
+      },
+      {
+        "subdomain": "thaiest.com",
+        "url": "https://thaiest.com",
+        "fullUrl": "https://thaiest.com",
+        "displayUrl": "https://thaiest.com (200)",
+        "statusCode": 200,
+        "statusText": "OK",
+        "responseTime": 1497,
+        "server": "cloudflare",
+        "contentType": "text/html; charset=utf-8",
+        "contentLength": 322038,
+        "technologies": [],
+        "title": "Thailand Travel Guide: Islands, Cities & Thai Food | THAIest",
+        "headers": {
+          "date": "Tue, 21 Apr 2026 13:33:29 GMT",
+          "content-type": "text/html; charset=utf-8",
+          "transfer-encoding": "chunked",
+          "connection": "keep-alive",
+          "set-cookie": "d012104268b111752c6338394d188026=1efoouu65oaau0c85kou1uhsbb; path=/; secure; HttpOnly",
+          "vary": "Accept-Encoding",
+          "expires": "Wed, 17 Aug 2005 00:00:00 GMT",
+          "last-modified": "Tue, 21 Apr 2026 13:33:29 GMT",
+          "cache-control": "no-store, no-cache, must-revalidate, post-check=0, pre-check=0",
+          "pragma": "no-cache",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=papr2e0TbFR4TupmWvxT69cYy70I6sMCJsA21LtLwZ8nGstnmnyCgrpRb5KrlgHSNryQ2vWKOI8aAXXJbbRPLqFq3d%2BJWQPKlvl4tGfGGs1%2BxsRW4TvtCWDWbvn1hQ%3D%3D\"}]}",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=63072000; includeSubDomains",
+          "x-frame-options": "SAMEORIGIN",
+          "x-content-type-options": "nosniff",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "x-turbo-charged-by": "LiteSpeed",
+          "cf-cache-status": "DYNAMIC",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "speculation-rules": "\"/cdn-cgi/speculation\"",
+          "cf-ray": "9efcc2bdcf733947-HKG"
+        }
+      },
+      {
+        "subdomain": "www.thaiest.com",
+        "url": "https://www.thaiest.com",
+        "fullUrl": "https://www.thaiest.com",
+        "displayUrl": "https://www.thaiest.com (200)",
+        "statusCode": 200,
+        "statusText": "OK",
+        "responseTime": 2217,
+        "server": "cloudflare",
+        "contentType": "text/html; charset=utf-8",
+        "contentLength": 322038,
+        "technologies": [],
+        "title": "Thailand Travel Guide: Islands, Cities & Thai Food | THAIest",
+        "headers": {
+          "date": "Tue, 21 Apr 2026 13:33:29 GMT",
+          "content-type": "text/html; charset=utf-8",
+          "transfer-encoding": "chunked",
+          "connection": "keep-alive",
+          "set-cookie": "d012104268b111752c6338394d188026=7esoemfobtan6dh2nlm68fg4ks; path=/; secure; HttpOnly",
+          "vary": "Accept-Encoding",
+          "expires": "Wed, 17 Aug 2005 00:00:00 GMT",
+          "last-modified": "Tue, 21 Apr 2026 13:33:29 GMT",
+          "cache-control": "no-store, no-cache, must-revalidate, post-check=0, pre-check=0",
+          "pragma": "no-cache",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=4%2FSc4dA0hztTzfk9b%2BaUurNB4KYEhEMZpCaSW1s2ybfORJTXr7Ae0tCSLOSaxR2iBNhO6X8GFmv1CZ%2BYhJp1%2FHblICAvfv3NuXgzT29h0ZvQhdVEco2ErJBJhMkThQ%3D%3D\"}]}",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=63072000; includeSubDomains",
+          "x-frame-options": "SAMEORIGIN",
+          "x-content-type-options": "nosniff",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "x-turbo-charged-by": "LiteSpeed",
+          "cf-cache-status": "DYNAMIC",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "speculation-rules": "\"/cdn-cgi/speculation\"",
+          "cf-ray": "9efcc2c2f9edb1e9-HKG"
+        }
+      },
+      {
+        "subdomain": "mail.thaiest.com",
+        "url": "https://mail.thaiest.com",
+        "fullUrl": "https://mail.thaiest.com",
+        "displayUrl": "https://mail.thaiest.com (200)",
+        "statusCode": 200,
+        "statusText": "OK",
+        "responseTime": 2304,
+        "server": "cloudflare",
+        "contentType": "text/html; charset=utf-8",
+        "contentLength": 322038,
+        "technologies": [],
+        "title": "Thailand Travel Guide: Islands, Cities & Thai Food | THAIest",
+        "headers": {
+          "date": "Tue, 21 Apr 2026 13:33:30 GMT",
+          "content-type": "text/html; charset=utf-8",
+          "transfer-encoding": "chunked",
+          "connection": "keep-alive",
+          "set-cookie": "d012104268b111752c6338394d188026=0ji687c9srhjh2jh7l010i6tbr; path=/; secure; HttpOnly",
+          "vary": "Accept-Encoding",
+          "expires": "Wed, 17 Aug 2005 00:00:00 GMT",
+          "last-modified": "Tue, 21 Apr 2026 13:33:30 GMT",
+          "cache-control": "no-store, no-cache, must-revalidate, post-check=0, pre-check=0",
+          "pragma": "no-cache",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=U%2Ft5XJEP5fwymAdMZmFIQV849Rq3iU2VfvCCVgqPeEpBF2uA3AIOajDljDjMkLObSnIVaYpPQ0qRIOgrfyz4wkHk4e05%2B1QcCbqrIVb3oWA7iRhwlb2kepxQXxWomA%3D%3D\"}]}",
+          "server": "cloudflare",
+          "strict-transport-security": "max-age=63072000; includeSubDomains",
+          "x-frame-options": "SAMEORIGIN",
+          "x-content-type-options": "nosniff",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "x-turbo-charged-by": "LiteSpeed",
+          "cf-cache-status": "DYNAMIC",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "speculation-rules": "\"/cdn-cgi/speculation\"",
+          "cf-ray": "9efcc2c44ab6220f-HKG"
+        }
+      }
+    ],
+    "all": [
+      "thaiest.com",
+      "autodiscover.thaiest.com",
+      "cpanel.thaiest.com",
+      "cpcalendars.thaiest.com",
+      "cpcontacts.thaiest.com",
+      "mail.thaiest.com",
+      "webdisk.thaiest.com",
+      "webmail.thaiest.com",
+      "www.thaiest.com"
+    ],
+    "files": [
+      "https://cpanel.thaiest.com/robots.txt (200)",
+      "https://webmail.thaiest.com/robots.txt (200)",
+      "https://webmail.thaiest.com/phpinfo.php (200)",
+      "https://cpanel.thaiest.com/phpinfo.php (200)",
+      "https://thaiest.com/sitemap.xml (200)",
+      "https://thaiest.com/robots.txt (200)",
+      "https://thaiest.com/LICENSE.txt (200)",
+      "https://www.thaiest.com/robots.txt (200)",
+      "https://www.thaiest.com/sitemap.xml (200)",
+      "https://mail.thaiest.com/sitemap.xml (200)",
+      "https://www.thaiest.com/LICENSE.txt (200)",
+      "https://mail.thaiest.com/robots.txt (200)",
+      "https://mail.thaiest.com/LICENSE.txt (200)"
+    ],
+    "folders": [
+      "https://cpanel.thaiest.com/images/ (200)",
+      "https://cpcalendars.thaiest.com/qa/ (200)",
+      "https://cpcalendars.thaiest.com/uat/ (200)",
+      "https://cpcalendars.thaiest.com/sandbox/ (200)",
+      "https://cpcalendars.thaiest.com/demo/ (200)",
+      "https://webmail.thaiest.com/images/ (200)",
+      "https://thaiest.com/admin/ (200)",
+      "https://cpcontacts.thaiest.com/administrator/ (200)",
+      "https://cpcontacts.thaiest.com/dashboard/ (200)",
+      "https://cpcontacts.thaiest.com/wp-admin/ (200)",
+      "https://cpcontacts.thaiest.com/portal/ (200)",
+      "https://cpcontacts.thaiest.com/api/ (200)",
+      "https://cpcontacts.thaiest.com/admin/ (200)",
+      "https://cpcontacts.thaiest.com/private/ (200)",
+      "https://cpcontacts.thaiest.com/public/ (200)",
+      "https://cpcontacts.thaiest.com/images/ (200)",
+      "https://cpcontacts.thaiest.com/test/ (200)",
+      "https://cpcontacts.thaiest.com/v2/ (200)",
+      "https://thaiest.com/api/ (200)",
+      "https://cpcontacts.thaiest.com/v3/ (200)",
+      "https://cpcontacts.thaiest.com/v1/ (200)",
+      "https://cpcontacts.thaiest.com/cpanel/ (200)",
+      "https://cpcontacts.thaiest.com/graphql/ (200)",
+      "https://cpcontacts.thaiest.com/swagger/ (200)",
+      "https://cpcontacts.thaiest.com/logs/ (200)",
+      "https://cpcontacts.thaiest.com/tmp/ (200)",
+      "https://cpcontacts.thaiest.com/internal/ (200)",
+      "https://cpcontacts.thaiest.com/hidden/ (200)",
+      "https://cpcontacts.thaiest.com/www/ (200)",
+      "https://cpcontacts.thaiest.com/dev/ (200)",
+      "https://cpcontacts.thaiest.com/testing/ (200)",
+      "https://cpcontacts.thaiest.com/cache/ (200)",
+      "https://cpcontacts.thaiest.com/swagger-ui/ (200)",
+      "https://cpcontacts.thaiest.com/uploads/ (200)",
+      "https://cpcontacts.thaiest.com/secret/ (200)",
+      "https://cpcontacts.thaiest.com/staging/ (200)",
+      "https://thaiest.com/dashboard/ (200)",
+      "https://thaiest.com/administrator/ (200)",
+      "https://cpcontacts.thaiest.com/uat/ (200)",
+      "https://cpcontacts.thaiest.com/qa/ (200)",
+      "https://thaiest.com/wp-admin/ (200)",
+      "https://cpcontacts.thaiest.com/backup/ (200)",
+      "https://thaiest.com/cpanel/ (200)",
+      "https://cpcontacts.thaiest.com/temp/ (200)",
+      "https://cpcontacts.thaiest.com/demo/ (200)",
+      "https://thaiest.com/portal/ (200)",
+      "https://cpcontacts.thaiest.com/static/ (200)",
+      "https://cpcontacts.thaiest.com/assets/ (200)",
+      "https://thaiest.com/logs/ (200)",
+      "https://cpcontacts.thaiest.com/old/ (200)",
+      "https://cpcontacts.thaiest.com/sandbox/ (200)",
+      "https://www.thaiest.com/admin/ (200)",
+      "https://www.thaiest.com/portal/ (200)",
+      "https://www.thaiest.com/cpanel/ (200)",
+      "https://www.thaiest.com/wp-admin/ (200)",
+      "https://www.thaiest.com/dashboard/ (200)",
+      "https://www.thaiest.com/v1/ (200)",
+      "https://www.thaiest.com/administrator/ (200)",
+      "https://www.thaiest.com/api/ (200)",
+      "https://www.thaiest.com/v2/ (200)",
+      "https://www.thaiest.com/v3/ (200)",
+      "https://thaiest.com/v1/ (200)",
+      "https://www.thaiest.com/swagger/ (200)",
+      "https://www.thaiest.com/temp/ (200)",
+      "https://www.thaiest.com/tmp/ (200)",
+      "https://www.thaiest.com/cache/ (200)",
+      "https://www.thaiest.com/logs/ (200)",
+      "https://www.thaiest.com/swagger-ui/ (200)",
+      "https://thaiest.com/v2/ (200)",
+      "https://www.thaiest.com/images/ (200)",
+      "https://www.thaiest.com/graphql/ (200)",
+      "https://www.thaiest.com/assets/ (200)",
+      "https://www.thaiest.com/uploads/ (200)",
+      "https://www.thaiest.com/public/ (200)",
+      "https://www.thaiest.com/www/ (200)",
+      "https://www.thaiest.com/static/ (200)",
+      "https://thaiest.com/graphql/ (200)",
+      "https://thaiest.com/uat/ (200)",
+      "https://thaiest.com/sandbox/ (200)",
+      "https://www.thaiest.com/backup/ (200)",
+      "https://www.thaiest.com/secret/ (200)",
+      "https://www.thaiest.com/sandbox/ (200)",
+      "https://thaiest.com/v3/ (200)",
+      "https://www.thaiest.com/old/ (200)",
+      "https://www.thaiest.com/demo/ (200)",
+      "https://www.thaiest.com/private/ (200)",
+      "https://thaiest.com/swagger-ui/ (200)",
+      "https://thaiest.com/backup/ (200)",
+      "https://thaiest.com/swagger/ (200)",
+      "https://thaiest.com/tmp/ (200)",
+      "https://thaiest.com/old/ (200)",
+      "https://thaiest.com/temp/ (200)",
+      "https://thaiest.com/cache/ (200)",
+      "https://www.thaiest.com/uat/ (200)",
+      "https://www.thaiest.com/dev/ (200)",
+      "https://www.thaiest.com/internal/ (200)",
+      "https://www.thaiest.com/staging/ (200)",
+      "https://www.thaiest.com/test/ (200)",
+      "https://www.thaiest.com/qa/ (200)",
+      "https://www.thaiest.com/testing/ (403)",
+      "https://www.thaiest.com/hidden/ (200)",
+      "https://thaiest.com/uploads/ (200)",
+      "https://thaiest.com/public/ (200)",
+      "https://thaiest.com/images/ (200)",
+      "https://thaiest.com/static/ (403)",
+      "https://thaiest.com/qa/ (403)",
+      "https://thaiest.com/private/ (403)",
+      "https://thaiest.com/hidden/ (403)",
+      "https://thaiest.com/secret/ (403)",
+      "https://thaiest.com/assets/ (403)",
+      "https://thaiest.com/internal/ (403)",
+      "https://thaiest.com/www/ (403)",
+      "https://thaiest.com/dev/ (403)",
+      "https://thaiest.com/staging/ (403)",
+      "https://thaiest.com/test/ (403)",
+      "https://thaiest.com/testing/ (403)",
+      "https://thaiest.com/demo/ (403)"
+    ],
+    "emails": [],
+    "technologies": {},
+    "jsEndpoints": []
+  }
+};
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'subkamuna_report.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

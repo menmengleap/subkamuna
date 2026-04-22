@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubKamuna Scan Report</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { opacity: 0.9; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 40px;
+            background: #f8f9fa;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .stat-card h3 { font-size: 2em; color: #667eea; margin-bottom: 5px; }
+        .stat-card p { color: #666; font-size: 0.9em; }
+        .content { padding: 40px; }
+        .domain-section {
+            margin-bottom: 40px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .domain-header {
+            background: #667eea;
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .domain-body {
+            padding: 20px;
+            display: none;
+        }
+        .domain-body.active { display: block; }
+        .subdomain-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .subdomain-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        .status-200 { color: #28a745; font-weight: bold; }
+        .status-301, .status-302 { color: #ffc107; }
+        .status-403, .status-404 { color: #dc3545; }
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            margin: 2px;
+        }
+        .badge-live { background: #28a745; color: white; }
+        .badge-file { background: #17a2b8; color: white; }
+        .badge-folder { background: #ffc107; color: #333; }
+        .badge-email { background: #dc3545; color: white; }
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .tech-item {
+            background: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.85em;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #5a67d8; }
+        @media (max-width: 768px) {
+            .stats { grid-template-columns: 1fr; }
+            .subdomain-list { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 SubKamuna Scan Report</h1>
+            <p>Generated on 4/22/2026, 9:39:47 AM</p>
+            <p>Scan Duration: 3.16 seconds</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <h3>1</h3>
+                <p>Domains Scanned</p>
+            </div>
+            <div class="stat-card">
+                <h3>2</h3>
+                <p>Total Subdomains</p>
+            </div>
+            <div class="stat-card">
+                <h3>1</h3>
+                <p>Live Services</p>
+            </div>
+            <div class="stat-card">
+                <h3>28</h3>
+                <p>Files Discovered</p>
+            </div>
+        </div>
+        
+        <div class="content">
+            <button onclick="expandAll()">Expand All</button>
+            <button onclick="collapseAll()">Collapse All</button>
+            <button onclick="exportToJSON()">Export JSON</button>
+            <button onclick="window.print()">Print Report</button>
+            <br><br>
+            <div class="domain-section">
+                <div class="domain-header" onclick="toggleDomain(this)">
+                    [+] thaikit.net - 1 live / 2 total
+                </div>
+                <div class="domain-body">
+                    <h4>[-] Live Subdomains (1)</h4>
+                    <div class="subdomain-list"><div class="subdomain-item">
+                        <span class="status-200">https://thaikit.net (200)</span>
+                      </div></div><h4 style="margin-top: 20px;">[+] Interesting Files (28)</h4>
+                      <div class="subdomain-list"><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/robots.txt (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/.env.backup (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/security.txt (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/.env (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/yarn.lock (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/sitemap.xml.gz (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/.htpasswd (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/.env.production (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/test.php (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/.env.local (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/LICENSE.txt (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/.git/config (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/LICENSE (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/admin.php (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/clientaccesspolicy.xml (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/CONTRIBUTING.md (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/info.php (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/crossdomain.xml (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/phpinfo.php (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/.htaccess (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/composer.json (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/wp-config.old (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/CHANGELOG.md (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/debug.php (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/README.md (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/sitemap.xml (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/package-lock.json (200)</div><div class="subdomain-item"><span class="badge badge-file">FILE</span> https://thaikit.net/package.json (200)</div></div><h4 style="margin-top: 20px;">[+] Accessible Folders (37)</h4>
+                      <div class="subdomain-list"><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/portal/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/administrator/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/api/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/uploads/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/private/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/admin/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/wp-admin/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/swagger-ui/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/images/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/temp/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/cache/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/dashboard/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/www/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/v3/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/assets/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/swagger/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/internal/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/logs/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/staging/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/backup/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/cpanel/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/hidden/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/v1/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/sandbox/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/testing/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/tmp/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/qa/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/uat/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/v2/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/graphql/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/public/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/test/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/secret/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/old/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/dev/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/static/ (200)</div><div class="subdomain-item"><span class="badge badge-folder">DIR</span> https://thaikit.net/demo/ (200)</div></div><h4 style="margin-top: 20px;">🔧 Detected Technologies</h4>
+                      <div class="tech-list"><div class="tech-item">Cloudflare 1 site(s)</div><div class="tech-item">Google Analytics 1 site(s)</div><div class="tech-item">Express.js 1 site(s)</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Generated by SubKamuna Ultimate Scanner v3.0</p>
+            <p>Bug Bounty Ready | Advanced Recon Tool</p>
+        </div>
+    </div>
+    
+    <script>
+        function toggleDomain(header) {
+            const body = header.nextElementSibling;
+            body.classList.toggle('active');
+        }
+        
+        function expandAll() {
+            document.querySelectorAll('.domain-body').forEach(body => {
+                body.classList.add('active');
+            });
+        }
+        
+        function collapseAll() {
+            document.querySelectorAll('.domain-body').forEach(body => {
+                body.classList.remove('active');
+            });
+        }
+        
+        function exportToJSON() {
+            const data = {
+  "thaikit.net": {
+    "domain": "thaikit.net",
+    "total": 2,
+    "live": [
+      "https://thaikit.net (200)"
+    ],
+    "liveDetailed": [
+      {
+        "subdomain": "thaikit.net",
+        "url": "https://thaikit.net",
+        "fullUrl": "https://thaikit.net",
+        "displayUrl": "https://thaikit.net (200)",
+        "statusCode": 200,
+        "statusText": "OK",
+        "responseTime": 676,
+        "server": "cloudflare",
+        "contentType": "text/html; charset=utf-8",
+        "contentLength": 90180,
+        "technologies": [],
+        "title": "Thaikit - Your Thailand Guide: The Website Collection Loved by Everyone Living in Thailand.",
+        "headers": {
+          "date": "Wed, 22 Apr 2026 02:39:45 GMT",
+          "content-type": "text/html; charset=utf-8",
+          "transfer-encoding": "chunked",
+          "connection": "keep-alive",
+          "access-control-allow-origin": "*",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "x-content-type-options": "nosniff",
+          "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=6dlZChsQeWm1wMU9gkjgXzmtvuQJ2OHnCOxVzIL%2BOA2EQBpzVivUZQj2LIlwDvPUQN3KZWrkg1bjrI3P8g0PdUqXy22HEBXhNQ6LkKx5ue5T3QNYwAkmpASO2bycvg%3D%3D\"}]}",
+          "cf-cache-status": "DYNAMIC",
+          "server": "cloudflare",
+          "vary": "accept-encoding",
+          "cf-ray": "9f0142847ce99d6f-SIN",
+          "alt-svc": "h3=\":443\"; ma=86400"
+        }
+      }
+    ],
+    "all": [
+      "thaikit.net",
+      "www.thaikit.net"
+    ],
+    "files": [
+      "https://thaikit.net/robots.txt (200)",
+      "https://thaikit.net/.env.backup (200)",
+      "https://thaikit.net/security.txt (200)",
+      "https://thaikit.net/.env (200)",
+      "https://thaikit.net/yarn.lock (200)",
+      "https://thaikit.net/sitemap.xml.gz (200)",
+      "https://thaikit.net/.htpasswd (200)",
+      "https://thaikit.net/.env.production (200)",
+      "https://thaikit.net/test.php (200)",
+      "https://thaikit.net/.env.local (200)",
+      "https://thaikit.net/LICENSE.txt (200)",
+      "https://thaikit.net/.git/config (200)",
+      "https://thaikit.net/LICENSE (200)",
+      "https://thaikit.net/admin.php (200)",
+      "https://thaikit.net/clientaccesspolicy.xml (200)",
+      "https://thaikit.net/CONTRIBUTING.md (200)",
+      "https://thaikit.net/info.php (200)",
+      "https://thaikit.net/crossdomain.xml (200)",
+      "https://thaikit.net/phpinfo.php (200)",
+      "https://thaikit.net/.htaccess (200)",
+      "https://thaikit.net/composer.json (200)",
+      "https://thaikit.net/wp-config.old (200)",
+      "https://thaikit.net/CHANGELOG.md (200)",
+      "https://thaikit.net/debug.php (200)",
+      "https://thaikit.net/README.md (200)",
+      "https://thaikit.net/sitemap.xml (200)",
+      "https://thaikit.net/package-lock.json (200)",
+      "https://thaikit.net/package.json (200)"
+    ],
+    "folders": [
+      "https://thaikit.net/portal/ (200)",
+      "https://thaikit.net/administrator/ (200)",
+      "https://thaikit.net/api/ (200)",
+      "https://thaikit.net/uploads/ (200)",
+      "https://thaikit.net/private/ (200)",
+      "https://thaikit.net/admin/ (200)",
+      "https://thaikit.net/wp-admin/ (200)",
+      "https://thaikit.net/swagger-ui/ (200)",
+      "https://thaikit.net/images/ (200)",
+      "https://thaikit.net/temp/ (200)",
+      "https://thaikit.net/cache/ (200)",
+      "https://thaikit.net/dashboard/ (200)",
+      "https://thaikit.net/www/ (200)",
+      "https://thaikit.net/v3/ (200)",
+      "https://thaikit.net/assets/ (200)",
+      "https://thaikit.net/swagger/ (200)",
+      "https://thaikit.net/internal/ (200)",
+      "https://thaikit.net/logs/ (200)",
+      "https://thaikit.net/staging/ (200)",
+      "https://thaikit.net/backup/ (200)",
+      "https://thaikit.net/cpanel/ (200)",
+      "https://thaikit.net/hidden/ (200)",
+      "https://thaikit.net/v1/ (200)",
+      "https://thaikit.net/sandbox/ (200)",
+      "https://thaikit.net/testing/ (200)",
+      "https://thaikit.net/tmp/ (200)",
+      "https://thaikit.net/qa/ (200)",
+      "https://thaikit.net/uat/ (200)",
+      "https://thaikit.net/v2/ (200)",
+      "https://thaikit.net/graphql/ (200)",
+      "https://thaikit.net/public/ (200)",
+      "https://thaikit.net/test/ (200)",
+      "https://thaikit.net/secret/ (200)",
+      "https://thaikit.net/old/ (200)",
+      "https://thaikit.net/dev/ (200)",
+      "https://thaikit.net/static/ (200)",
+      "https://thaikit.net/demo/ (200)"
+    ],
+    "emails": [],
+    "technologies": {
+      "Cloudflare": "1 site(s)",
+      "Google Analytics": "1 site(s)",
+      "Express.js": "1 site(s)"
+    },
+    "jsEndpoints": []
+  }
+};
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'subkamuna_report.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

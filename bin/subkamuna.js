@@ -11,7 +11,7 @@ const program = new Command();
 
 // Banner Function
 function showBanner() {
-  console.log(chalk.cyan(`
+  console.log(chalk.white(`
  
   #####                      #    #                                    
  #     # #    # #####        #   #    ##   #    # #    # #    #   ##   
@@ -131,7 +131,7 @@ async function main() {
     if (options.scanFolders) console.log(chalk.white(`[+] Folder Discovery: Enabled (Depth: ${options.depth})`));
     if (options.techDetect) console.log(chalk.white(`[+] Tech Detection: Enabled`));
     if (options.emailExtract) console.log(chalk.white(`[+] Email Extraction: Enabled`));
-    if (options.realReport) console.log(chalk.white(` [+] Report: Enabled`));
+    if (options.realReport) console.log(chalk.white(`[+] Report: Enabled`));
     console.log(chalk.gray(`\n${'═'.repeat(55)}\n`));
   }
 
@@ -143,7 +143,7 @@ async function main() {
     const domain = validDomains[i];
     
     if (!options.silent && validDomains.length > 1) {
-      console.log(chalk.yellow(`\n[${i + 1}/${validDomains.length}] Processing: ${domain}`));
+      console.log(chalk.white(`[${i + 1}/${validDomains.length}] Processing: ${domain}`));
     }
 
     try {
@@ -151,20 +151,20 @@ async function main() {
       allResults[domain] = result;
       
       if (!options.silent) {
-        console.log(chalk.green(`\n[+] ${domain}: ${result.live.length} live / ${result.total} total subdomains`));
+        console.log(chalk.white(`\n[+] ${domain}: ${result.live.length} live / ${result.total} total subdomains`));
         
         // Display additional findings
         if (result.files && result.files.length > 0) {
-          console.log(chalk.cyan(`[-F] Found ${result.files.length} interesting files`));
+          console.log(chalk.white(`[F] Found ${result.files.length} interesting files`));
         }
         if (result.folders && result.folders.length > 0) {
-          console.log(chalk.cyan(`[-F] Found ${result.folders.length} accessible folders`));
+          console.log(chalk.white(`[F] Found ${result.folders.length} accessible folders`));
         }
         if (result.emails && result.emails.length > 0) {
-          console.log(chalk.magenta(`[F] Found ${result.emails.length} email addresses`));
+          console.log(chalk.white(`[F] Found ${result.emails.length} email addresses`));
         }
         if (result.technologies && Object.keys(result.technologies).length > 0) {
-          console.log(chalk.yellow(`[D] Detected ${Object.keys(result.technologies).length} technologies`));
+          console.log(chalk.white(`[D] Detected ${Object.keys(result.technologies).length} technologies`));
         }
       }
     } catch (error) {
@@ -186,9 +186,9 @@ async function main() {
 
   // Final Summary
   if (!options.silent) {
-    console.log(chalk.cyan('\n' + '═'.repeat(55)));
-    console.log(chalk.green.bold('[+] FINAL SCAN '));
-    console.log(chalk.cyan('═'.repeat(55)));
+    console.log(chalk.cyan('\n' + ''.repeat(55)));
+    console.log(chalk.white.bold('[+] FINAL SCAN '));
+    console.log(chalk.cyan(''.repeat(55)));
     
     let totalLive = 0;
     let totalSubs = 0;
@@ -202,29 +202,27 @@ async function main() {
       totalFiles += result.files?.length || 0;
       totalFolders += result.folders?.length || 0;
       totalEmails += result.emails?.length || 0;
-      
-      console.log(chalk.white(`\n├─${domain}:`));
-      console.log(chalk.gray(`   ├─ Subdomains: ${chalk.green(result.total)}`));
-      console.log(chalk.gray(`   ├─ Live Services: ${chalk.green(result.live.length)}`));
-      if (result.files?.length) console.log(chalk.gray(`   ├─ Files: ${chalk.cyan(result.files.length)}`));
-      if (result.folders?.length) console.log(chalk.gray(`   ├─ Folders: ${chalk.cyan(result.folders.length)}`));
-      if (result.emails?.length) console.log(chalk.gray(`   └─ Emails: ${chalk.magenta(result.emails.length)}`));
+      console.log(chalk.white(`\n${domain}:`));
+      console.log(chalk.white(`Subdomains: ${chalk.white(result.total)}`));
+      console.log(chalk.white(`Live Services: ${chalk.white(result.live.length)}`));
+      if (result.files?.length) console.log(chalk.white(`Files: ${chalk.white(result.files.length)}`));
+      if (result.folders?.length) console.log(chalk.white(`Folders: ${chalk.white(result.folders.length)}`));
+      if (result.emails?.length) console.log(chalk.white(`Emails: ${chalk.white(result.emails.length)}`));
     }
-    
-    console.log(chalk.cyan('\n' + '='.repeat(55)));
+    console.log(chalk.cyan('\n' + ''.repeat(55)));
     console.log(chalk.white(`[-] Total Time: ${totalTime}s`));
-    console.log(chalk.green(`[-] Total Subdomains: ${totalSubs}`));
-    console.log(chalk.green(`[-] Total Live: ${totalLive}`));
-    if (totalFiles > 0) console.log(chalk.cyan(`[-] Total Files: ${totalFiles}`));
-    if (totalFolders > 0) console.log(chalk.cyan(`[-] Total Folders: ${totalFolders}`));
-    if (totalEmails > 0) console.log(chalk.magenta(`[-] Total Emails: ${totalEmails}`));
-    console.log(chalk.cyan('═'.repeat(55) + '\n'));
+    console.log(chalk.white(`[-] Total Subdomains: ${totalSubs}`));
+    console.log(chalk.white(`[-] Total Live: ${totalLive}`));
+    if (totalFiles > 0) console.log(chalk.white(`[-] Total Files: ${totalFiles}`));
+    if (totalFolders > 0) console.log(chalk.white(`[-] Total Folders: ${totalFolders}`));
+    if (totalEmails > 0) console.log(chalk.white(`[-] Total Emails: ${totalEmails}`));
+    console.log(chalk.cyan(''.repeat(55) + '\n'));
   }
 
   if (outputStream) {
     await outputStream.close();
     if (!options.silent) {
-      console.log(chalk.green(`[+] Results saved to: ${options.output}`));
+      console.log(chalk.white(`[+] Results saved to: ${options.output}`));
     }
   }
 }
@@ -365,7 +363,7 @@ async function generateRealReport(results, totalTime, options) {
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔍 SubKamuna Scan Report</h1>
+            <h1> SubKamuna Scan Report</h1>
             <p>Generated on ${new Date().toLocaleString()}</p>
             <p>Scan Duration: ${totalTime} seconds</p>
         </div>
@@ -464,8 +462,8 @@ async function generateRealReport(results, totalTime, options) {
   htmlContent += `
         </div>
         <div class="footer">
-            <p>Generated by SubKamuna Ultimate Scanner v3.0</p>
-            <p>Bug Bounty Ready | Advanced Recon Tool</p>
+            <p>Generated by SubKamuna Ultimate Scanner v1.0</p>
+            <p>Bug Bounty Ready | Recon Tool</p>
         </div>
     </div>
     
@@ -502,7 +500,7 @@ async function generateRealReport(results, totalTime, options) {
 </html>`;
   
   await fs.writeFile(reportFile, htmlContent);
-  console.log(chalk.green(`\n[+] Real Report generated: ${reportFile}`));
+  console.log(chalk.white(`\n[+] Report generated: ${reportFile}`));
 }
 
 // Export to CSV
@@ -536,7 +534,7 @@ async function exportToCSV(results) {
   }
   
   await fs.writeFile(csvFile, csvContent);
-  console.log(chalk.green(`[+] CSV Export saved: ${csvFile}`));
+  console.log(chalk.white(`[+] CSV Export saved: ${csvFile}`));
 }
 
 // Error handling
