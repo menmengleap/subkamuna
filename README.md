@@ -520,41 +520,7 @@ If you find SubKamuna useful, please consider:
 
 # Show your support
 echo " Star SubKamuna on GitHub!"
+
 echo " Report issues to help improve"
+
 echo " Contribute code to make it better"
-
-##  Quick Reference Card
-# Basic Scan
-```
-node bin/subkamuna.js example.com
-```
-# Live Only
-```
-node bin/subkamuna.js example.com --only-live
-```
-# Full Recon
-```
-node bin/subkamuna.js example.com --scan-files --scan-folders --tech-detect --real-report
-```
-# Multi-Domain
-```
-node bin/subkamuna.js -l domains.txt --only-live
-```
-# Fast Scan
-```
-node bin/subkamuna.js example.com -t 100 -to 2
-```
-# Silent Mode (Pipeline)
-```
-node bin/subkamuna.js example.com --only-live -s
-```
-# Verbose Mode
-```
-node bin/subkamuna.js example.com -v
-```
-# Help
-```
-node bin/subkamuna.js --help
-```
-Built with ❤️ for the security community
-
