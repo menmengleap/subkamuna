@@ -57,7 +57,7 @@ go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 ##  Quick Installation
 ```bash
 git clone https://github.com/menmengleap/sub-kamuna.git
-cd sub-kamuna
+cd subkamuna
 npm install
 ```
 ##  Test Simple Scan
